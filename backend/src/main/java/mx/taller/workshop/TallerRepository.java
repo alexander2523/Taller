@@ -1,0 +1,1 @@
+package mx.taller.workshop; import org.springframework.data.jpa.repository.JpaRepository; import java.util.*; public interface TallerRepository extends JpaRepository<Taller,UUID>{boolean existsByActivoTrue();Optional<Taller> findFirstByActivoTrue();}

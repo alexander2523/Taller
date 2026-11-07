@@ -1,0 +1,8 @@
+package mx.taller.auth;
+import jakarta.validation.Valid; import org.springframework.security.crypto.password.PasswordEncoder; import org.springframework.web.bind.annotation.*; import java.util.*;
+@RestController @RequestMapping("/api/auth") public class AuthController {
+ private final UsuarioRepository repo; private final PasswordEncoder encoder; public AuthController(UsuarioRepository r,PasswordEncoder e){repo=r;encoder=e;}
+ @PostMapping("/registro") public Map<String,Object> registro(@Valid @RequestBody RegistroUsuarioDto d){if(repo.existsByEmailIgnoreCase(d.email()))throw new IllegalArgumentException("El correo ya está registrado"); Usuario u=repo.save(new Usuario(d.email().toLowerCase(Locale.ROOT),encoder.encode(d.password()))); return Map.of("id",u.getId(),"mensaje","Registro recibido; un administrador debe asignar un rol");}
+ @PostMapping("/login") public Map<String,Object> login(@Valid @RequestBody LoginDto d){Usuario u=repo.findByEmailAndActivoTrue(d.email().toLowerCase(Locale.ROOT)).orElseThrow(()->new IllegalArgumentException("Credenciales inválidas"));if(!encoder.matches(d.password(),u.getPasswordHash()))throw new IllegalArgumentException("Credenciales inválidas");return Map.of("email",u.getEmail(),"rol",u.getRol()==null?"PENDIENTE":u.getRol().name());}
+ public record LoginDto(@jakarta.validation.constraints.NotBlank @jakarta.validation.constraints.Email @jakarta.validation.constraints.Pattern(regexp="^[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$") String email,@jakarta.validation.constraints.NotBlank @jakarta.validation.constraints.Pattern(regexp="^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{10,72}$") String password){}
+}

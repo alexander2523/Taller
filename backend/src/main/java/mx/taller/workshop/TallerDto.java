@@ -1,0 +1,3 @@
+package mx.taller.workshop;
+import jakarta.validation.constraints.*;
+public record TallerDto(@NotBlank @Pattern(regexp="^[A-Z&Ñ]{3,4}[0-9]{6}[A-Z0-9]{3}$") String rfc,@NotBlank @Pattern(regexp="^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .,'-]{2,150}$") String nombreComercial,@NotBlank @Pattern(regexp="^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 #.,-]{3,250}$") String calle,@NotBlank @Pattern(regexp="^\\d{5}$") String codigoPostal,@NotBlank @Pattern(regexp="^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ .'-]{2,100}$") String colonia,@NotBlank @Pattern(regexp="^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ .'-]{2,100}$") String municipio,@NotBlank @Pattern(regexp="^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ .'-]{2,100}$") String estado){}

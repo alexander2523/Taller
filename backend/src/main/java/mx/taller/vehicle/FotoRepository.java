@@ -1,0 +1,1 @@
+package mx.taller.vehicle; import org.springframework.data.jpa.repository.JpaRepository; import java.util.*; public interface FotoRepository extends JpaRepository<FotoVehiculo,UUID>{List<FotoVehiculo> findByVehiculoIdAndActivoTrue(UUID id);List<FotoVehiculo> findByVehiculoId(UUID id);}

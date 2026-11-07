@@ -1,0 +1,5 @@
+erDiagram
+  CLIENTES { binary16 id PK boolean activo varchar nombre varchar apellido varchar email UK varchar telefono UK }
+  TALLERES { binary16 id PK boolean activo }
+  TALLERES ||--o{ CLIENTES : administra
+  CLIENTES ||--o{ VEHICULOS : posee

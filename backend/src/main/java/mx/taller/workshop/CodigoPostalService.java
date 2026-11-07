@@ -1,0 +1,8 @@
+package mx.taller.workshop;
+import com.fasterxml.jackson.databind.*; import org.springframework.beans.factory.annotation.Value; import org.springframework.stereotype.Service; import org.springframework.web.client.*; import java.util.*;
+@Service public class CodigoPostalService {
+ private final RestClient client; private final ObjectMapper mapper;
+ public CodigoPostalService(@Value("${app.postal-api-url:https://api.zippopotam.us/MX}") String base,ObjectMapper mapper){this.client=RestClient.builder().baseUrl(base).build();this.mapper=mapper;}
+ public Map<String,Object> consultar(String cp){try{JsonNode root=mapper.readTree(client.get().uri("/{cp}",cp).retrieve().body(String.class));List<Map<String,String>> lugares=new ArrayList<>();String estado="";for(JsonNode p:root.path("places")){String entidad=field(p,"state","state name"),localidad=field(p,"place name","place_name"),municipio=field(p,"municipality","municipality name");if(estado.isBlank())estado=entidad;if(municipio.isBlank())municipio=localidad;lugares.add(Map.of("colonia",localidad,"municipio",municipio));}return Map.of("codigoPostal",cp,"estado",estado,"lugares",lugares);}catch(RestClientResponseException e){if(e.getStatusCode().value()==404)throw new IllegalArgumentException("No se encontró el código postal");throw new IllegalArgumentException("El proveedor postal no está disponible");}catch(Exception e){if(e instanceof IllegalArgumentException ia)throw ia;throw new IllegalArgumentException("No fue posible consultar el código postal");}}
+ private String field(JsonNode n,String a,String b){String v=n.path(a).asText("");return v.isBlank()?n.path(b).asText(""):v;}
+}

@@ -1,0 +1,6 @@
+package mx.taller.workshop;
+import jakarta.persistence.*; import mx.taller.common.BaseEntity;
+@Entity @Table(name="talleres") public class Taller extends BaseEntity {
+ @Column(nullable=false,length=13,unique=true) private String rfc; @Column(nullable=false,length=150) private String nombreComercial; @Column(nullable=false,length=250) private String calle; @Column(nullable=false,length=10) private String codigoPostal; @Column(nullable=false,length=100) private String colonia; @Column(nullable=false,length=100) private String municipio; @Column(nullable=false,length=100) private String estado; @Column(length=500) private String fotografia;
+ protected Taller(){} public String getRfc(){return rfc;} public String getNombreComercial(){return nombreComercial;} public String getCalle(){return calle;} public String getCodigoPostal(){return codigoPostal;} public String getColonia(){return colonia;} public String getMunicipio(){return municipio;} public String getEstado(){return estado;} public String getFotografia(){return fotografia;} public void actualizar(String r,String n,String c,String cp,String co,String m,String e){rfc=r.toUpperCase();nombreComercial=n;calle=c;codigoPostal=cp;colonia=co;municipio=m;estado=e;} public void setFotografia(String f){fotografia=f;}
+}

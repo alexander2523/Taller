@@ -1,0 +1,8 @@
+erDiagram
+  CLIENTES ||--o{ VEHICULOS : posee
+  TALLERES ||--o{ CLIENTES : administra
+  VEHICULOS ||--o{ FOTOS_VEHICULO : adjunta
+  CLIENTES { binary16 id PK boolean activo }
+  TALLERES { binary16 id PK boolean activo }
+  VEHICULOS { binary16 id PK boolean activo binary16 cliente_id FK varchar vin UK varchar placa UK varchar marca varchar modelo int anio varchar version varchar color }
+  FOTOS_VEHICULO { binary16 id PK boolean activo binary16 vehiculo_id FK varchar ruta varchar tipo }

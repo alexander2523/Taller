@@ -1,0 +1,7 @@
+package mx.taller.vehicle;
+import jakarta.persistence.*; import mx.taller.common.BaseEntity; import mx.taller.client.Cliente;
+@Entity @Table(name="vehiculos",uniqueConstraints={@UniqueConstraint(columnNames="vin"),@UniqueConstraint(columnNames="placa")}) public class Vehiculo extends BaseEntity {
+ @ManyToOne(optional=false,fetch=FetchType.EAGER) @JoinColumn(name="cliente_id",nullable=false) private Cliente cliente;
+ @Column(nullable=false,length=17) private String vin; @Column(nullable=false,length=20) private String placa; @Column(nullable=false,length=60) private String marca; @Column(nullable=false,length=60) private String modelo; @Column(nullable=false) private short anio; @Column(nullable=false,length=60) private String version; @Column(nullable=false,length=40) private String color;
+ protected Vehiculo(){} public Vehiculo(Cliente c,String vin,String p,String ma,String mo,short an,String v,String co){this.cliente=c;actualizar(vin,p,ma,mo,an,v,co);} public void actualizar(String vi,String p,String ma,String mo,short an,String v,String co){vin=vi.replaceAll("\\s","").toUpperCase();placa=p.replaceAll("\\s","").toUpperCase();marca=ma;modelo=mo;anio=an;version=v;color=co;} public String getVin(){return vin;}public String getPlaca(){return placa;}public String getMarca(){return marca;}public String getModelo(){return modelo;}public short getAnio(){return anio;}public String getVersion(){return version;}public String getColor(){return color;} public Cliente getCliente(){return cliente;}
+}
