@@ -72,12 +72,52 @@ export default function App(){
  async function reactivarCliente(id){try{await request(`/clientes/${id}/reactivar`,{method:'PATCH'});notify('Cliente reactivado');load()}catch(e){notify(e.message)}}
  async function reactivarVehiculo(id){try{await request(`/vehiculos/${id}/reactivar`,{method:'PATCH'});notify('Vehículo reactivado');load()}catch(e){notify(e.message)}}
 
- if(!session)return <div className="login-page"><form className="card shadow p-4" onSubmit={authenticate}>
-  <h1 className="h4 mb-4">🔧 Gestión de Taller</h1><div className="btn-group mb-3"><button type="button" className={`btn ${authMode==='login'?'btn-primary':'btn-outline-primary'}`} onClick={()=>setAuthMode('login')}>Iniciar sesión</button><button type="button" className={`btn ${authMode==='register'?'btn-primary':'btn-outline-primary'}`} onClick={()=>setAuthMode('register')}>Registrarse</button></div>
-  <label className="form-label">Correo</label><input className={`form-control mb-3 ${auth.email?(rx.email.test(auth.email)?'is-valid':'is-invalid'):''}`} type="email" required value={auth.email} onChange={e=>setAuth({...auth,email:e.target.value})}/>
-  <label className="form-label">Contraseña</label><input className={`form-control mb-3 ${auth.password?(rx.password.test(auth.password)?'is-valid':'is-invalid'):''}`} type="password" required value={auth.password} onChange={e=>setAuth({...auth,password:e.target.value})}/>{authMode==='register'&&<small className="text-secondary mb-3">10–72 caracteres, mayúscula, minúscula y número. El administrador asignará tu rol.</small>}
-  <button className="btn btn-primary">{authMode==='login'?'Iniciar sesión':'Crear cuenta'}</button>{toast&&<div className="toast-note">{toast}</div>}
- </form></div>;
+ if(!session)return <div className="auth-page">
+  <aside className="auth-story">
+   <div className="auth-story-glow auth-story-glow-one"/><div className="auth-story-glow auth-story-glow-two"/>
+   <div className="auth-brand" aria-label="Gestión de Taller">
+    <span className="auth-brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M14.2 5.2a5.2 5.2 0 0 0-6.6 6.6l-4 4a2.2 2.2 0 0 0 3.1 3.1l4-4a5.2 5.2 0 0 0 6.6-6.6l-3 3-3.1-3.1 3-3Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/><circle cx="5.2" cy="17.8" r=".65" fill="currentColor"/></svg></span>
+    <span>Gestión de Taller</span>
+   </div>
+   <div className="auth-story-copy">
+    <span className="auth-eyebrow"><span/> Plataforma para talleres</span>
+    <h1>Todo tu taller,<br/><em>en marcha.</em></h1>
+    <p>Organiza clientes, vehículos y equipo desde un solo lugar. Menos vueltas para administrar. Más claridad en cada día de trabajo.</p>
+    <div className="auth-benefits">
+     <div><span className="auth-benefit-icon">01</span><span><strong>Clientes y vehículos</strong><small>Información centralizada y fácil de encontrar</small></span></div>
+     <div><span className="auth-benefit-icon">02</span><span><strong>Acceso por roles</strong><small>Cada persona con las herramientas que necesita</small></span></div>
+    </div>
+   </div>
+   <div className="auth-visual" aria-hidden="true">
+    <div className="auth-visual-heading"><span className="auth-visual-dot"/><span>ESPACIO DE TRABAJO</span><span className="auth-visual-lines">•••</span></div>
+    <div className="auth-visual-content"><div className="auth-visual-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 13h2l2-5h10l2 5h2v5h-2v2h-2v-2H7v2H5v-2H3v-5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/><path d="M7 13h10M7.5 16h.01M16.5 16h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg></div><div><strong>Tu operación, organizada</strong><span>Clientes · Vehículos · Equipo</span></div><span className="auth-visual-arrow">↗</span></div>
+    <div className="auth-visual-foot"><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/><span/></div>
+   </div>
+   <div className="auth-story-footer"><span>GESTIÓN CLARA. TALLER EN CONTROL.</span><span>© {new Date().getFullYear()} Gestión de Taller</span></div>
+  </aside>
+  <main className="auth-main">
+   <section className="auth-card" aria-labelledby="auth-title">
+    <div className="auth-card-top"><span className="auth-mobile-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M14.2 5.2a5.2 5.2 0 0 0-6.6 6.6l-4 4a2.2 2.2 0 0 0 3.1 3.1l4-4a5.2 5.2 0 0 0 6.6-6.6l-3 3-3.1-3.1 3-3Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/></svg></span><span className="auth-step">{authMode==='login'?'ACCESO AL SISTEMA':'NUEVA CUENTA'}</span></div>
+    <h2 id="auth-title">{authMode==='login'?'Qué bueno verte.':'Empieza por aquí.'}</h2>
+    <p className="auth-intro">{authMode==='login'?'Inicia sesión para continuar con la operación de tu taller.':'Crea tu cuenta para solicitar acceso al espacio de tu taller.'}</p>
+    <div className="auth-tabs" aria-label="Acceso o registro">
+     <button type="button" aria-pressed={authMode==='login'} className={authMode==='login'?'active':''} onClick={()=>setAuthMode('login')}>Iniciar sesión</button>
+     <button type="button" aria-pressed={authMode==='register'} className={authMode==='register'?'active':''} onClick={()=>setAuthMode('register')}>Crear cuenta</button>
+    </div>
+    <form id="auth-form" className="auth-form" onSubmit={authenticate}>
+     <div className="auth-field"><label htmlFor="auth-email">Correo electrónico</label><div className="auth-input-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="m4.5 7 7.5 5.5L19.5 7"/></svg><input id="auth-email" className={`form-control auth-input ${auth.email?(rx.email.test(auth.email)?'is-valid':'is-invalid'):''}`} type="email" autoComplete="email" autoCapitalize="none" spellCheck="false" placeholder="tu@taller.com" required value={auth.email} onChange={e=>setAuth({...auth,email:e.target.value})}/></div></div>
+     <div className="auth-field"><div className="auth-label-row"><label htmlFor="auth-password">Contraseña</label>{authMode==='login'&&<span>Acceso protegido</span>}</div><div className="auth-input-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="10" width="15" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3m-4 4.5v2"/></svg><input id="auth-password" className={`form-control auth-input ${auth.password?(rx.password.test(auth.password)?'is-valid':'is-invalid'):''}`} type="password" autoComplete={authMode==='login'?'current-password':'new-password'} placeholder="Escribe tu contraseña" required value={auth.password} aria-describedby={authMode==='register'?'password-hint':undefined} onChange={e=>setAuth({...auth,password:e.target.value})}/></div>
+      {authMode==='register'&&<div id="password-hint" className="auth-password-hint"><span className={rx.password.test(auth.password)?'met':''}>✓</span> 10–72 caracteres, con mayúscula, minúscula y número.</div>}
+     </div>
+     <button className="auth-submit" type="submit"><span>{authMode==='login'?'Entrar a mi taller':'Solicitar cuenta'}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+    </form>
+    <div className="auth-note"><span className="auth-note-icon">i</span><p>{authMode==='login'?'Tu información está disponible según el rol asignado por el administrador.':'Después del registro, el administrador del taller deberá asignarte un rol para continuar.'}</p></div>
+    <div className="auth-card-footer"><span>¿Problemas para acceder?</span><span>Contacta al administrador de tu taller.</span></div>
+   </section>
+   <div className="auth-mobile-footer">GESTIÓN CLARA. TALLER EN CONTROL.</div>
+  </main>
+  {toast&&<div className="toast-note" role="status">{toast}</div>}
+ </div>;
 
  if(session.rol==='PENDIENTE')return <div className="login-page"><section className="card shadow p-4"><h1 className="h4">Solicitud pendiente</h1><p>Tu cuenta está registrada. El administrador del taller debe asignarte un rol para continuar.</p><button className="btn btn-outline-secondary" onClick={()=>{localStorage.removeItem('taller-auth');localStorage.removeItem('taller-session');setSession(null)}}>Cerrar sesión</button></section>{toast&&<div className="toast-note">{toast}</div>}</div>;
 
