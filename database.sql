@@ -7,6 +7,13 @@ CREATE TABLE usuarios (
  email VARCHAR(254) NOT NULL UNIQUE, password_hash VARCHAR(255) NOT NULL,
  rol ENUM('ADMINISTRADOR_TALLER','RECEPCIONISTA','MECANICO') NULL
 );
+CREATE TABLE password_reset_tokens (
+ id BINARY(16) NOT NULL PRIMARY KEY, activo BOOLEAN NOT NULL DEFAULT TRUE,
+ usuario_id BINARY(16) NOT NULL, token_hash CHAR(64) NOT NULL UNIQUE,
+ expires_at TIMESTAMP(6) NOT NULL, used_at TIMESTAMP(6) NULL,
+ CONSTRAINT fk_password_reset_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+CREATE INDEX ix_password_reset_usuario_usado ON password_reset_tokens(usuario_id, used_at);
 CREATE TABLE talleres (
  id BINARY(16) NOT NULL PRIMARY KEY, activo BOOLEAN NOT NULL DEFAULT TRUE,
  rfc VARCHAR(13) NOT NULL UNIQUE, nombre_comercial VARCHAR(150) NOT NULL,
